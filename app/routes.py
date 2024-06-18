@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db, bcrypt
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm
 from app.models import User
 
 
@@ -55,3 +55,16 @@ def logout():
 @login_required
 def account():
     return render_template('account.html', title='Account')
+
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    form = EditProfileForm()
+    if form.validate_on_submit():
+        # Обработка данных формы
+        username = form.username.data
+        email = form.email.data
+        # В реальном приложении здесь следует обновить данные пользователя в базе данных
+        flash('Профиль обновлен успешно!', 'success')
+        return redirect(url_for('edit_profile'))
+    return render_template('edit_profile.html', form=form)

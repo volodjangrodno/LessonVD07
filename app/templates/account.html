@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Ваш аккаунт</h1>
-    <p>Это страница вашего аккаунта.</p>
+    <h1>{{current_user.username}}</h1>
+    <p>{{current_user.email}}</p>
+
+    <button class="btn btn-primary"><a href="{{ url_for('edit_profile') }}">Редактировать профиль</a></button>
 {% endblock %}
