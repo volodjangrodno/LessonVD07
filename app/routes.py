@@ -62,9 +62,22 @@ def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():
         # Обработка данных формы
-        username = form.username.data
-        email = form.email.data
-        # В реальном приложении здесь следует обновить данные пользователя в базе данных
-        flash('Профиль обновлен успешно!', 'success')
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        current_user.password = form.password.data
+        current_user.confirm_password = form.confirm_password.data
+        try:
+            db.session.commit()
+            flash('Профиль обновлен успешно!', 'success')
+        except:
+            db.session.rollback()
+            flash('Ошибка при обновлении профиля!', 'danger')
         return redirect(url_for('edit_profile'))
+
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+        form.password.data = current_user.password
+
+    # Вывод данных в шаблон
     return render_template('edit_profile.html', form=form)
